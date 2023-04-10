@@ -4,7 +4,7 @@
 
 const dayJSObj = dayjs();
 var currentHour = 0;
-var testHour = 12;
+var testHour = 0;
 
 $(function () {
   // TODO: Add a listener for click events on the save button. This code should
@@ -38,10 +38,16 @@ $(function () {
 
 
 // Update global currentHour var
-function updateHour(hour) {
-  hour = dayjs().hour()
-  console.log(hour);
-  // Add clock the repeats function every minute
+function updateHour() {
+  currentHour = dayjs().hour()
+  if (testHour > 0) {
+    currentHour = testHour
+    testHour++
+
+  }
+  console.log(currentHour);
+  boxColor();
+  setTimeout(updateHour, 60000);
 };
 
 function saveBut (value, num) {
@@ -58,19 +64,23 @@ function loadSaved () {
 
 function boxColor () {
   for (let i = 9; i <= 17; i++) {
-    if (i === testHour) {
+    if (i === currentHour) {
       $('#hour-' + i).removeClass('past present future').addClass('present');
-    } else if (i < testHour) {
+    } else if (i < currentHour) {
       $('#hour-' + i).removeClass('past present future').addClass('past');
-    } else if (i > testHour) {
+    } else if (i > currentHour) {
       $('#hour-' + i).removeClass('past present future').addClass('future');
     }
   }
 }
 
-updateHour(currentHour);
-loadSaved()
-boxColor()
+
+
+$('#currentDay').text(dayjs().format('dddd[,] MMMM D'))
+updateHour();
+loadSaved();
+
+
 
 // Save button click listeners
 var saveBut9 = $('#btn9');
